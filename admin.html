@@ -2,182 +2,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090b16">
-  <title>Admin Panel | PEOPLE INFO</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b16">
+<title>Admin Dashboard | PEOPLE INFO</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:20px;font-family:Arial,sans-serif;color:#f5f3ff;background:radial-gradient(ellipse at top left,#29164b,transparent 45%),radial-gradient(ellipse at bottom right,#102943,transparent 40%),#090b16}
+.wrap{width:min(720px,100%);margin:30px auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
+.logo{font-weight:900;font-size:21px;letter-spacing:1px}
+.logo span{color:#a78bfa}
+a{color:#c4b5fd;text-decoration:none;font-size:13px}
+.panel{padding:23px;margin-bottom:20px;border:1px solid #ffffff19;border-radius:20px;background:#14182aeF;box-shadow:0 20px 60px #0005}
+h1{font-size:30px;margin:0 0 8px}
+h2{font-size:20px;margin:0 0 8px}
+p{color:#a4acc5;font-size:13px;line-height:1.7}
+label{display:block;font-size:13px;margin:16px 0 7px;color:#ddd6fe}
+input,textarea{display:block;width:100%;padding:14px;border-radius:11px;border:1px solid #ffffff20;background:#090b16;color:white;font:inherit;outline:none}
+input:focus,textarea:focus{border-color:#9568ff}
+textarea{min-height:110px;resize:vertical}
+button{padding:13px 17px;border:0;border-radius:11px;color:white;background:linear-gradient(110deg,#8250ec,#477bff);font-weight:bold;cursor:pointer}
+button:hover{filter:brightness(1.12)}
+.primary{width:100%;margin-top:18px}
+.secondary{background:#252a40;border:1px solid #ffffff20}
+.danger{background:#bd3654}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.actions button{flex:1}
+.hidden{display:none!important}
+#loginMessage,#adminMessage{margin-top:12px;overflow-wrap:anywhere}
+.record{padding:17px;margin-top:12px;background:#ffffff07;border:1px solid #ffffff18;border-radius:14px;overflow-wrap:anywhere}
+.record h3{margin:0 0 8px;color:#c4b5fd}
+.record p{white-space:pre-wrap}
+.badge{font-size:10px;letter-spacing:1px;color:#c4b5fd;border:1px solid #9568ff55;background:#9568ff15;padding:7px 10px;border-radius:20px}
+footer{text-align:center;color:#737c96;font-size:11px;padding:20px}
+@media(max-width:480px){body{padding:14px}.wrap{margin:16px auto}.panel{padding:18px}h1{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<header>
+  <div class="logo">PEOPLE<span>INFO</span></div>
+  <a href="index.html">← User Website</a>
+</header>
+
+<section id="loginSection" class="panel">
+  <span class="badge">SECURE AREA</span>
+  <h1 style="margin-top:18px">Admin Login</h1>
+  <p>Login to manage your information records.</p>
+
+  <form id="adminLoginForm">
+    <label for="adminUsername">Username</label>
+    <input id="adminUsername" type="text" autocomplete="username" required>
+
+    <label for="adminPassword">Password</label>
+    <input id="adminPassword" type="password" autocomplete="current-password" required>
+
+    <button class="primary" type="submit">Login to Dashboard ↗</button>
+  </form>
+  <p id="loginMessage" role="status"></p>
+</section>
+
+<section id="dashboard" class="hidden">
+  <div class="panel">
+    <span class="badge">ADMIN CONTROL CENTER</span>
+    <h1 style="margin-top:18px">Dashboard</h1>
+    <p>Add information here. Records will be saved in this browser only.</p>
+    <div class="actions">
+      <button id="logoutButton" type="button" class="secondary">Logout</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 id="formHeading">Add Information</h2>
+    <p>Enter a name and the information you want to display.</p>
+
+    <form id="recordForm">
+      <input id="recordId" type="hidden">
+
+      <label for="personName">Person Name</label>
+      <input id="personName" type="text" maxlength="100"
+             placeholder="Enter name" required>
+
+      <label for="personInfo">Information</label>
+      <textarea id="personInfo" maxlength="5000"
+                placeholder="Enter permitted information"
+                required></textarea>
+
+      <button id="saveRecordButton" class="primary" type="submit">
+        Add Information
+      </button>
+      <button id="cancelEditButton" class="secondary primary hidden"
+              type="button">Cancel Edit</button>
+    </form>
+    <p id="adminMessage" role="status"></p>
+  </div>
+
+  <div class="panel">
+    <h2>Saved Records</h2>
+    <p>Edit or delete information you have added.</p>
+    <div id="adminRecords"></div>
+  </div>
+</section>
+
+<footer>PEOPLE INFO · ADMIN DASHBOARD</footer>
+</div>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  const form=document.getElementById("recordForm");
+  const id=document.getElementById("recordId");
+  const heading=document.getElementById("formHeading");
+  const save=document.getElementById("saveRecordButton");
+  const cancel=document.getElementById("cancelEditButton");
+
+  function resetEditor(){
+    form.reset();
+    id.value="";
+    heading.textContent="Add Information";
+    save.textContent="Add Information";
+    cancel.classList.add("hidden");
+  }
+
+  cancel.addEventListener("click",resetEditor);
+
+  document.getElementById("adminRecords").addEventListener("click",function(event){
+    if(event.target.closest("button")?.textContent==="Edit"){
+      heading.textContent="Edit Information";
+      save.textContent="Update Information";
+      cancel.classList.remove("hidden");
     }
-
-    :root {
-      --bg: #090b16;
-      --panel: #14182a;
-      --purple: #9568ff;
-      --blue: #4baaff;
-      --text: #f5f3ff;
-      --muted: #a4acc5;
-      --border: #ffffff16;
-    }
-
-    body {
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(ellipse at 10% 0%, #29164b 0%, transparent 40%),
-        radial-gradient(ellipse at 100% 100%, #102943 0%, transparent 38%),
-        var(--bg);
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 6%;
-      background: #090b1690;
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(15px);
-    }
-
-    .logo {
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: 1px;
-    }
-
-    .logo span { color: var(--purple); }
-
-    a {
-      color: #cbb8ff;
-      text-decoration: none;
-      font-size: 13px;
-    }
-
-    main {
-      width: min(760px, 92%);
-      margin: 42px auto;
-    }
-
-    .heading {
-      margin-bottom: 25px;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 7px 12px;
-      background: #9568ff18;
-      border: 1px solid #9568ff45;
-      color: #cbb8ff;
-      border-radius: 25px;
-      font-size: 10px;
-      letter-spacing: 2px;
-      margin-bottom: 14px;
-    }
-
-    h1 {
-      font-size: clamp(27px, 6vw, 39px);
-      margin-bottom: 10px;
-    }
-
-    .muted {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 13px;
-    }
-
-    .panel {
-      padding: 24px;
-      margin-bottom: 20px;
-      background: rgba(20, 24, 42, .92);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: 0 20px 60px #0004;
-    }
-
-    .panel h2 {
-      font-size: 19px;
-      margin-bottom: 8px;
-    }
-
-    label {
-      display: block;
-      font-size: 12px;
-      color: #d8d5ed;
-      margin: 17px 0 8px;
-    }
-
-    input, textarea {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      outline: none;
-      color: white;
-      background: #090b16;
-      font: inherit;
-      font-size: 14px;
-    }
-
-    input:focus, textarea:focus {
-      border-color: var(--purple);
-      box-shadow: 0 0 0 3px #9568ff18;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    button {
-      padding: 13px 17px;
-      border: none;
-      border-radius: 11px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      background: linear-gradient(110deg, #8250ec, #477bff);
-      transition: .2s;
-    }
-
-    button:hover { filter: brightness(1.15); }
-
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .primary {
-      width: 100%;
-      margin-top: 20px;
-    }
-
-    .secondary {
-      background: #ffffff12;
-      border: 1px solid var(--border);
-    }
-
-    .danger {
-      background: #c23d58;
-    }
-
-    .hidden { display: none !important; }
-
-    .message {
-      margin-top: 15px;
-      padding: 12px;
-      background: #ffffff08;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 13px;
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-    }
-
-    .record {
-     
+  });
+});
+</script>
+</body>
+</html>
