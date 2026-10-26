@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b16">
+  <title>Admin Panel | PEOPLE INFO</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #090b16;
+      --panel: #14182a;
+      --purple: #9568ff;
+      --blue: #4baaff;
+      --text: #f5f3ff;
+      --muted: #a4acc5;
+      --border: #ffffff16;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 10% 0%, #29164b 0%, transparent 40%),
+        radial-gradient(ellipse at 100% 100%, #102943 0%, transparent 38%),
+        var(--bg);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 6%;
+      background: #090b1690;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(15px);
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .logo span { color: var(--purple); }
+
+    a {
+      color: #cbb8ff;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    main {
+      width: min(760px, 92%);
+      margin: 42px auto;
+    }
+
+    .heading {
+      margin-bottom: 25px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 12px;
+      background: #9568ff18;
+      border: 1px solid #9568ff45;
+      color: #cbb8ff;
+      border-radius: 25px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(27px, 6vw, 39px);
+      margin-bottom: 10px;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .panel {
+      padding: 24px;
+      margin-bottom: 20px;
+      background: rgba(20, 24, 42, .92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px #0004;
+    }
+
+    .panel h2 {
+      font-size: 19px;
+      margin-bottom: 8px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: #d8d5ed;
+      margin: 17px 0 8px;
+    }
+
+    input, textarea {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      outline: none;
+      color: white;
+      background: #090b16;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px #9568ff18;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      padding: 13px 17px;
+      border: none;
+      border-radius: 11px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(110deg, #8250ec, #477bff);
+      transition: .2s;
+    }
+
+    button:hover { filter: brightness(1.15); }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .primary {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .secondary {
+      background: #ffffff12;
+      border: 1px solid var(--border);
+    }
+
+    .danger {
+      background: #c23d58;
+    }
+
+    .hidden { display: none !important; }
+
+    .message {
+      margin-top: 15px;
+      padding: 12px;
+      background: #ffffff08;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .record {
+     
