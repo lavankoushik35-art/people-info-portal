@@ -4,352 +4,609 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090b16">
-  <title>PEOPLE INFO | Premium Portal</title>
+  <meta name="theme-color" content="#080b16">
+
+  <title>PEOPLE INFO | Smart Search</title>
+  <meta name="description" content="PEOPLE INFO - Search locally saved information by name.">
+
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     :root {
-      --bg: #090b16;
-      --panel: rgba(22, 25, 47, 0.88);
-      --purple: #9b6dff;
-      --blue: #52c8ff;
-      --text: #f5f3ff;
-      --muted: #a4acc5;
+      --bg: #080b16;
+      --panel: rgba(19, 25, 46, 0.86);
+      --line: rgba(130, 155, 255, 0.19);
+      --text: #f4f6ff;
+      --muted: #a2acc9;
+      --blue: #6d8cff;
+      --cyan: #46e4ff;
     }
 
     body {
       min-height: 100vh;
-      font-family: Arial, sans-serif;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
       color: var(--text);
       background:
-        radial-gradient(ellipse at 15% 10%, #241347 0%, transparent 40%),
-        radial-gradient(ellipse at 90% 80%, #102c4a 0%, transparent 38%),
+        radial-gradient(ellipse at 10% 5%, #20275a 0, transparent 36%),
+        radial-gradient(ellipse at 90% 40%, #102b48 0, transparent 35%),
         var(--bg);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 35px 35px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .page {
+      width: min(1100px, 92%);
+      margin: auto;
+      position: relative;
+      z-index: 1;
     }
 
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 7%;
-      border-bottom: 1px solid #ffffff12;
-      background: #090b1690;
-      backdrop-filter: blur(16px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      gap: 18px;
+      padding: 25px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
 
-    .logo {
-      font-size: 21px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 19px;
       font-weight: 900;
       letter-spacing: 1.5px;
     }
 
-    .logo span {
-      color: var(--purple);
-    }
-
-    .admin-link {
-      text-decoration: none;
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       color: white;
-      border: 1px solid #9b6dff70;
-      background: #9b6dff16;
-      padding: 11px 16px;
-      border-radius: 12px;
-      font-size: 13px;
+      font-size: 23px;
+      background: linear-gradient(135deg, #647eff, #36d8f5);
+      box-shadow: 0 0 28px #567aff55;
     }
 
-    main {
-      width: min(850px, 92%);
-      margin: 75px auto 45px;
-    }
-
-    .hero {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 8px 13px;
-      color: #c8b5ff;
-      background: #9b6dff18;
-      border: 1px solid #9b6dff40;
-      border-radius: 30px;
-      font-size: 11px;
-      letter-spacing: 2px;
-      margin-bottom: 22px;
-    }
-
-    h1 {
-      font-size: clamp(35px, 8vw, 62px);
-      line-height: 1.12;
-      letter-spacing: -2px;
-    }
-
-    h1 span {
-      background: linear-gradient(100deg, #c3a6ff, #63d5ff);
+    .brand span:last-child {
+      background: linear-gradient(90deg, #fff, #83dfff);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
-    .subtitle {
-      color: var(--muted);
-      margin: 17px auto 0;
-      max-width: 480px;
-      line-height: 1.7;
-      font-size: 14px;
-    }
-
-    .search-card {
-      background: var(--panel);
-      border: 1px solid #ffffff18;
-      border-radius: 24px;
-      padding: 25px;
-      box-shadow: 0 25px 80px #0005,
-                  inset 0 1px #ffffff0b;
-      backdrop-filter: blur(18px);
-    }
-
-    .search-card label {
-      display: block;
-      color: #d8d5ed;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      margin-bottom: 13px;
-    }
-
-    .search-row {
+    .nav {
       display: flex;
       gap: 10px;
+      align-items: center;
     }
 
-    input {
-      min-width: 0;
-      flex: 1;
-      padding: 16px;
-      border: 1px solid #ffffff1b;
-      outline: none;
-      border-radius: 13px;
-      background: #090b16;
+    .nav a {
+      padding: 10px 15px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      color: #c3cbe5;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .nav a:hover {
       color: white;
-      font-size: 15px;
+      border-color: var(--line);
+      background: #ffffff0b;
     }
 
-    input:focus {
-      border-color: var(--purple);
-      box-shadow: 0 0 0 3px #9b6dff20;
+    .nav .admin-link {
+      border-color: #7089ff66;
+      background: #647eff15;
+      color: #b8c5ff;
     }
 
-    button {
-      border: none;
-      cursor: pointer;
-      border-radius: 13px;
-      padding: 0 22px;
-      color: white;
-      font-weight: bold;
-      background: linear-gradient(110deg, #8250ec, #477bff);
-      box-shadow: 0 6px 22px #8250ec35;
-      transition: transform .2s, filter .2s;
+    .hero {
+      text-align: center;
+      padding: 82px 0 40px;
+      animation: appear .7s ease both;
     }
 
-    button:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.15);
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 14px;
+      margin-bottom: 24px;
+      border: 1px solid #6e8aff44;
+      border-radius: 30px;
+      background: #627dff12;
+      color: #b8c8ff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
     }
 
-    .hint {
-      margin-top: 13px;
-      font-size: 12px;
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #53f2bd;
+      box-shadow: 0 0 12px #53f2bd;
+    }
+
+    h1 {
+      font-size: clamp(39px, 7vw, 76px);
+      line-height: 1.08;
+      letter-spacing: -2.5px;
+      font-weight: 950;
+    }
+
+    h1 span {
+      display: block;
+      color: transparent;
+      background: linear-gradient(90deg, #7793ff, #58e5ff, #b9a3ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-description {
+      max-width: 590px;
+      margin: 22px auto 0;
       color: var(--muted);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .search-panel {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 27px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(145deg, #151c33ed, #0e1427ed);
+      box-shadow:
+        0 25px 75px #00000040,
+        inset 0 1px 0 #ffffff0c;
+      backdrop-filter: blur(16px);
+      animation: appear .9s ease both;
+    }
+
+    .search-heading {
+      margin-bottom: 17px;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .search-heading small {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 11px;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+      gap: 11px;
+      padding: 0 15px;
+      border: 1px solid #6679a43b;
+      border-radius: 13px;
+      background: #080d1b;
+      transition: .25s;
+    }
+
+    .input-wrap:focus-within {
+      border-color: #7794ff;
+      box-shadow: 0 0 0 4px #7794ff16;
+    }
+
+    .search-icon {
+      color: #8ea5ff;
+      font-size: 21px;
+    }
+
+    #searchName {
+      width: 100%;
+      min-width: 0;
+      padding: 16px 0;
+      outline: none;
+      border: none;
+      background: transparent;
+      color: white;
+    }
+
+    #searchName::placeholder {
+      color: #6e7895;
+    }
+
+    .search-button {
+      padding: 0 23px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+      background: linear-gradient(120deg, #607dff, #438be9);
+      box-shadow: 0 8px 24px #5078ff30;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .search-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px #5078ff50;
+    }
+
+    .search-button:active {
+      transform: scale(.98);
+    }
+
+    .results-section {
+      max-width: 760px;
+      margin: 35px auto 0;
+    }
+
+    .results-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 17px;
+      font-size: 17px;
+    }
+
+    .results-title span {
+      color: #94a5d5;
+      font-size: 12px;
+      font-weight: 500;
     }
 
     #results {
-      margin-top: 20px;
+      display: grid;
+      gap: 13px;
     }
 
     .result-card {
-      background: #ffffff08;
-      border: 1px solid #ffffff16;
-      border-radius: 16px;
       padding: 20px;
-      margin-top: 12px;
-      overflow-wrap: anywhere;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #11182aeb;
+      animation: appear .3s ease both;
     }
 
     .result-card h3 {
-      font-size: 20px;
-      margin-bottom: 14px;
-      color: #cbb7ff;
+      margin-bottom: 9px;
+      font-size: 18px;
+      overflow-wrap: anywhere;
     }
 
     .result-card p {
-      color: #d3d7e8;
-      line-height: 1.8;
-      font-size: 14px;
+      color: #b0bad5;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
-    .status {
-      color: var(--muted);
+    .empty-state {
+      padding: 25px 18px;
       text-align: center;
-      padding: 20px 5px;
-      line-height: 1.7;
-      font-size: 13px;
+      border: 1px dashed #59698d66;
+      border-radius: 16px;
+      color: #a6b2d2;
+      line-height: 1.8;
+      background: #11182a80;
+    }
+
+    .empty-icon {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 28px;
     }
 
     .features {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 20px;
+      gap: 15px;
+      margin: 55px 0 70px;
     }
 
     .feature {
-      background: #ffffff06;
-      border: 1px solid #ffffff12;
-      border-radius: 15px;
-      padding: 17px 10px;
-      text-align: center;
+      padding: 22px;
+      border: 1px solid #8294cb20;
+      border-radius: 17px;
+      background: #ffffff05;
+      transition: .25s;
     }
 
-    .feature .symbol {
-      font-size: 22px;
+    .feature:hover {
+      transform: translateY(-4px);
+      border-color: #8294cb55;
+      background: #ffffff09;
+    }
+
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      margin-bottom: 16px;
+      border-radius: 13px;
+      background: #6d8cff19;
+      font-size: 21px;
+    }
+
+    .feature h3 {
       margin-bottom: 9px;
+      font-size: 15px;
     }
 
-    .feature strong {
-      display: block;
-      font-size: 12px;
-    }
-
-    .feature small {
-      display: block;
+    .feature p {
       color: var(--muted);
-      font-size: 10px;
-      margin-top: 7px;
-      line-height: 1.5;
+      font-size: 13px;
+      line-height: 1.7;
     }
 
     footer {
+      padding: 25px 0 32px;
+      border-top: 1px solid #ffffff12;
+      color: #8792b0;
       text-align: center;
-      color: #777f99;
-      padding: 25px 15px 35px;
-      font-size: 11px;
-      border-top: 1px solid #ffffff0c;
+      font-size: 12px;
+      line-height: 1.8;
     }
 
-    @media (max-width: 520px) {
-      header { padding: 17px 5%; }
-      .logo { font-size: 17px; }
-      .admin-link { padding: 10px 12px; }
-      main { margin-top: 52px; }
-      .search-card { padding: 17px; }
-      .search-row { flex-direction: column; }
-      .search-row input { width: 100%; }
-      .search-row button { min-height: 48px; }
-      .features { gap: 7px; }
-      .feature { padding: 14px 5px; }
+    footer strong {
+      color: #b9c6ff;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        width: 91%;
+      }
+
+      header {
+        padding: 17px 0;
+      }
+
+      .brand {
+        gap: 8px;
+        font-size: 14px;
+        letter-spacing: .8px;
+      }
+
+      .brand-icon {
+        width: 37px;
+        height: 37px;
+        border-radius: 11px;
+      }
+
+      .nav {
+        gap: 3px;
+      }
+
+      .nav a {
+        padding: 9px 8px;
+        font-size: 12px;
+      }
+
+      .hero {
+        padding: 65px 0 30px;
+      }
+
+      h1 {
+        letter-spacing: -1.5px;
+      }
+
+      .hero-description {
+        font-size: 14px;
+      }
+
+      .search-panel {
+        padding: 19px;
+        border-radius: 19px;
+      }
+
+      .search-form {
+        flex-direction: column;
+      }
+
+      .input-wrap {
+        width: 100%;
+      }
+
+      .search-button {
+        min-height: 49px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 40px 0 45px;
+      }
+
+      .feature {
+        padding: 19px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
+
 <body>
+  <div class="page">
+    <header>
+      <a class="brand" href="index.html" aria-label="People Info home">
+        <span class="brand-icon">P</span>
+        <span>PEOPLE INFO</span>
+      </a>
 
-<header>
-  <div class="logo">PEOPLE<span>INFO</span></div>
-  <a class="admin-link" href="admin.html">Admin Login ↗</a>
-</header>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a class="admin-link" href="admin.html">Admin Login ↗</a>
+      </nav>
+    </header>
 
-<main>
-  <section class="hero">
-    <div class="tag">✦ PREMIUM INFORMATION PORTAL</div>
-    <h1>Find Information.<br><span>Search Smarter.</span></h1>
-    <p class="subtitle">
-      Search for a name to find information
-      that has been added to our database.
-    </p>
-  </section>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          SMART INFORMATION SEARCH
+        </div>
 
-  <section class="search-card">
-    <label for="searchName">SEARCH BY NAME</label>
+        <h1>
+          Find Information.
+          <span>Search Smarter.</span>
+        </h1>
 
-    <form id="searchForm">
-      <div class="search-row">
-        <input
-          type="search"
-          id="searchName"
-          placeholder="Enter a name..."
-          maxlength="100"
-          autocomplete="off"
-          required
-        >
-        <button type="submit">Search ↗</button>
-      </div>
-    </form>
+        <p class="hero-description">
+          Search information by name using records saved in this browser.
+          Simple, fast and designed for a premium experience.
+        </p>
+      </section>
 
-    <p class="hint">Enter a name and press Search.</p>
+      <section class="search-panel" aria-labelledby="searchHeading">
+        <h2 class="search-heading" id="searchHeading">
+          Search People
+          <small>Enter a name to find matching saved records.</small>
+        </h2>
 
-    <div id="results" aria-live="polite">
-      <div class="status">
-        🔎<br>
-        Search for a name to see available records.
-      </div>
-    </div>
-  </section>
+        <form class="search-form" id="searchForm">
+          <div class="input-wrap">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input
+              id="searchName"
+              name="searchName"
+              type="search"
+              placeholder="Enter a person's name..."
+              autocomplete="off"
+              aria-label="Name to search"
+              required
+            >
+          </div>
 
-  <section class="features">
-    <div class="feature">
-      <div class="symbol">🔍</div>
-      <strong>Quick Search</strong>
-      <small>Search available records</small>
-    </div>
-    <div class="feature">
-      <div class="symbol">🛡️</div>
-      <strong>Admin Managed</strong>
-      <small>Admin-managed information</small>
-    </div>
-    <div class="feature">
-      <div class="symbol">⚡</div>
-      <strong>Easy Access</strong>
-      <small>Simple user interface</small>
-    </div>
-  </section>
-</main>
+          <button class="search-button" type="submit">
+            Search →
+          </button>
+        </form>
+      </section>
 
-<footer>
-  PEOPLE INFO PORTAL · Information shared with permission
-</footer>
+      <section class="results-section" aria-live="polite">
+        <h2 class="results-title">
+          Search Results
+          <span id="resultStatus">Ready to search</span>
+        </h2>
 
-<script>
-  const form = document.getElementById("searchForm");
-  const searchInput = document.getElementById("searchName");
-  const results = document.getElementById("results");
+        <div id="results">
+          <div class="empty-state">
+            <span class="empty-icon">⌕</span>
+            <strong>Your results will appear here.</strong>
+            <br>
+            Enter a name above to get started.
+          </div>
+        </div>
+      </section>
 
-  form.addEventListener("submit", function(event) {
-    event.preventDefault();
+      <section class="features" aria-label="Features">
+        <article class="feature">
+          <div class="feature-icon">⚡</div>
+          <h3>Quick Search</h3>
+          <p>Find matching records by entering a person's name.</p>
+        </article>
 
-    const name = searchInput.value.trim();
+        <article class="feature">
+          <div class="feature-icon">✦</div>
+          <h3>Premium Interface</h3>
+          <p>A modern dark interface with responsive layouts and smooth effects.</p>
+        </article>
 
-    if (!name) return;
+        <article class="feature">
+          <div class="feature-icon">▣</div>
+          <h3>Browser Storage</h3>
+          <p>Records are stored locally in this browser, not synced across devices.</p>
+        </article>
+      </section>
+    </main>
 
-    results.replaceChildren();
+    <footer>
+      <strong>PEOPLE INFO</strong> · Smart Information Search
+      <br>
+      Personal demo project · Local browser storage
+      <br>
+      Only add information you have permission to store and share.
+    </footer>
+  </div>
 
-    const message = document.createElement("div");
-    message.className = "status";
-    message.textContent =
-      "Database not connected yet. Connect Firebase to search admin-added records.";
+  <script src="script.js"></script>
 
-    results.appendChild(message);
-  });
+  <script>
+    // Show a helpful message before the first search.
+    document.addEventListener("DOMContentLoaded", () => {
+      const results = document.getElementById("results");
+      const status = document.getElementById("resultStatus");
+      const form = document.getElementById("searchForm");
 
-<script src="script.js"></script>
+      if (!form || !results) return;
 
-
+      form.addEventListener("submit", () => {
+        // script.js performs the actual search.
+        // Update the status after its submit handler has run.
+        setTimeout(() => {
+          const cards = results.querySelectorAll(".result-card");
+          status.textContent = cards.length
+            ? cards.length + (cards.length === 1 ? " match" : " matches")
+            : "Search complete";
+        }, 0);
+      });
+    });
+  </script>
 </body>
 </html>
